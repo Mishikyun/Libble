@@ -1,8 +1,20 @@
 # Libble
 
+[![Latest Release](https://img.shields.io/github/v/release/Mishikyun/Libble?label=Release)](https://github.com/Mishikyun/Libble/releases/latest)
+[![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B%20(API%2026%2B)-0F766E)](https://github.com/Mishikyun/Libble/releases/latest)
+
 **A 100% offline-first Android work-hours tracker and two-stage escalating shift alarm app.**
 
 Built with Jetpack Compose, Material 3, Room, and native `AlarmManager` (`com.personal.workhours` · `v1.1.0`). Zero internet permissions, zero tracking, and complete portability via CSV exports and validated JSON backups.
+
+---
+
+## Download
+
+- **[Download Libble v1.1.0 APK](https://github.com/Mishikyun/Libble/releases/latest/download/Libble-v1.1.0.apk)** (direct signed release APK)
+- **[All Releases & Release Notes](https://github.com/Mishikyun/Libble/releases/latest)**
+
+> Requires Android 8.0 (API 26) or higher. Because Libble is distributed directly outside Google Play, allow installs from your browser/files app when prompted.
 
 ---
 
