@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Libble</string>
+    <string name="notif_channel_gentle_name">Work Reminders</string>
+    <string name="notif_channel_gentle_desc">Gentle notifications when it is time to clock in, end break, or clock out.</string>
+    <string name="notif_channel_alarm_name">Escalated Work Alarms</string>
+    <string name="notif_channel_alarm_desc">Urgent vibration and ringing alarms when a punch reminder is missed.</string>
+    <string name="notif_channel_alarm_active_name">Active Alarm Status</string>
+    <string name="notif_channel_alarm_active_desc">Quiet status notification shown while the full-screen alarm is open.</string>
+</resources>

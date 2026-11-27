@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Subtle outer horological dial ring -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,24A30,30 0 1,1 53.99,24Z"
+        android:strokeWidth="2.4"
+        android:strokeColor="#1E5F5A" />
+
+    <!-- Cardinal precision ticks (12, 3, 6, 9) -->
+    <path
+        android:fillColor="#2DD4BF"
+        android:pathData="M53,27.5h2v4.5h-2z" />
+    <path
+        android:fillColor="#2DD4BF"
+        android:pathData="M76,53h4.5v2H76z" />
+    <path
+        android:fillColor="#1E5F5A"
+        android:pathData="M53,76h2v4.5h-2z" />
+    <path
+        android:fillColor="#1E5F5A"
+        android:pathData="M27.5,53h4.5v2h-4.5z" />
+
+    <!-- Signature Libble L-Clock hands (12:15 forming bold geometric 'L') -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,37C48,35.34 49.34,34 51,34C52.66,34 54,35.34 54,37V53H67C68.66,53 70,54.34 70,56C70,57.66 68.66,59 67,59H51C49.34,59 48,57.66 48,56V37Z" />
+
+    <!-- Center pivot accent -->
+    <path
+        android:fillColor="#2DD4BF"
+        android:pathData="M51,53A3,3 0 1,1 50.99,53Z" />
+</vector>

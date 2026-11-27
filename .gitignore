@@ -1,0 +1,25 @@
+# Gradle & Build
+.gradle/
+build/
+app/build/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# IDE & Local config
+.idea/
+*.iml
+.DS_Store
+local.properties
+
+# Keystores & Signing Secrets
+keystore.properties
+keystore/
+*.jks
+*.keystore
+
+# Kotlin & Profiler
+*.hprof
+.cxx/
