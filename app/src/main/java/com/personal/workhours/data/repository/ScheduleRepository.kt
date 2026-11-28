@@ -1,6 +1,7 @@
 package com.personal.workhours.data.repository
 
 import androidx.room.withTransaction
+import com.personal.workhours.alarm.AlarmScheduler
 import com.personal.workhours.data.local.DayOffOverrideEntity
 import com.personal.workhours.data.local.WorkHoursDatabase
 import com.personal.workhours.data.local.toDomain
@@ -15,7 +16,7 @@ import java.time.LocalDate
 
 class ScheduleRepository(
     private val db: WorkHoursDatabase,
-    private val alarmReconciler: AlarmReconciler
+    private val alarmReconciler: AlarmScheduler
 ) {
     private val scheduleDao = db.scheduleDao()
 

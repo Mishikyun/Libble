@@ -153,3 +153,5 @@ Project specs, architecture notes, and engineering guidelines live in [`docs/`](
 - [TechnicalRequirements.MD](docs/TechnicalRequirements.MD) — Core functional and non-functional requirements
 - [implementation.MD](docs/implementation.MD) — Implementation plan and build notes
 - [ProjectRules.MD](docs/ProjectRules.MD) — Codebase engineering and security standards
+- [PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) — Offline-first privacy and permissions disclosure
+- [TERMS_AND_CONDITIONS.md](docs/TERMS_AND_CONDITIONS.md) — Usage terms and disclaimers

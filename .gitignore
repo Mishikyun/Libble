@@ -23,3 +23,6 @@ keystore/
 # Kotlin & Profiler
 *.hprof
 .cxx/
+
+# Graphify Knowledge Graph
+graphify-out/

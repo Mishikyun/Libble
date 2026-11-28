@@ -1,7 +1,6 @@
 package com.personal.workhours.ui.dashboard
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.personal.workhours.data.preferences.PreferencesRepository
 import com.personal.workhours.data.repository.ScheduleRepository
@@ -416,18 +415,6 @@ class DashboardViewModel(
                 note = note
             )
             onResult(res)
-        }
-    }
-
-    class Factory(
-        private val workLogRepository: WorkLogRepository,
-        private val scheduleRepository: ScheduleRepository,
-        private val preferencesRepository: PreferencesRepository,
-        private val clock: Clock = Clock.systemDefaultZone()
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DashboardViewModel(workLogRepository, scheduleRepository, preferencesRepository, clock) as T
         }
     }
 }

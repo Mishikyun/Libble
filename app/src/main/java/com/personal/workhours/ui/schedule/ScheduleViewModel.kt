@@ -1,7 +1,6 @@
 package com.personal.workhours.ui.schedule
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.personal.workhours.data.repository.ScheduleRepository
 import com.personal.workhours.domain.model.DayOffOverride
@@ -75,14 +74,5 @@ class ScheduleViewModel(
 
     fun removeDayOffOverride(workDate: String) {
         viewModelScope.launch { scheduleRepository.removeDayOffOverride(workDate) }
-    }
-
-    class Factory(
-        private val scheduleRepository: ScheduleRepository
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ScheduleViewModel(scheduleRepository) as T
-        }
     }
 }

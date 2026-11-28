@@ -8,7 +8,6 @@ import android.os.Build
 import com.personal.workhours.MainActivity
 import com.personal.workhours.data.local.WorkHoursDatabase
 import com.personal.workhours.data.local.toDomain
-import com.personal.workhours.data.repository.AlarmReconciler
 import com.personal.workhours.domain.ScheduleResolver
 import com.personal.workhours.domain.model.AlarmTriggerSpec
 import com.personal.workhours.domain.model.ReminderEventType
@@ -21,11 +20,11 @@ class AlarmScheduler(
     private val db: WorkHoursDatabase,
     private val notificationManager: AlarmNotificationManager,
     private val clock: Clock = Clock.systemDefaultZone()
-) : AlarmReconciler {
+) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    override suspend fun reconcileAll() {
+    suspend fun reconcileAll() {
         db.ensureDefaultSeedData()
         val schedules = db.scheduleDao().getDaySchedules().associate { it.dayOfWeek to it.toDomain() }
         val configs = db.scheduleDao().getReminderConfigs().map { it.toDomain() }.associateBy { it.eventType }
@@ -61,7 +60,7 @@ class AlarmScheduler(
         }
     }
 
-    override suspend fun scheduleBreakEnd(breakStartEpochMs: Long) {
+    suspend fun scheduleBreakEnd(breakStartEpochMs: Long) {
         cancelBreakEnd()
         val today = Instant.ofEpochMilli(clock.millis()).atZone(clock.zone).toLocalDate()
         val schedule = db.scheduleDao().getScheduleForDay(today.dayOfWeek.value)?.toDomain()
@@ -75,11 +74,11 @@ class AlarmScheduler(
         specs.forEach { scheduleSpec(it) }
     }
 
-    override fun cancelBreakEnd() {
+    fun cancelBreakEnd() {
         cancelEvent(ReminderEventType.BREAK_END)
     }
 
-    override fun cancelEvent(eventType: ReminderEventType) {
+    fun cancelEvent(eventType: ReminderEventType) {
         cancelRequestCode(AlarmContracts.requestCodeFor(eventType, 1))
         cancelRequestCode(AlarmContracts.requestCodeFor(eventType, 2))
         cancelRequestCode(AlarmContracts.REQUEST_CODE_SNOOZE)

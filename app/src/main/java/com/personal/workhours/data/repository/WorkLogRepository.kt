@@ -1,6 +1,7 @@
 package com.personal.workhours.data.repository
 
 import androidx.room.withTransaction
+import com.personal.workhours.alarm.AlarmScheduler
 import com.personal.workhours.data.local.BreakSessionEntity
 import com.personal.workhours.data.local.DayOffOverrideEntity
 import com.personal.workhours.data.local.WorkDayEntity
@@ -22,7 +23,7 @@ import java.time.ZoneId
 
 class WorkLogRepository(
     private val db: WorkHoursDatabase,
-    private val alarmReconciler: AlarmReconciler,
+    private val alarmReconciler: AlarmScheduler,
     private val clock: Clock = Clock.systemDefaultZone(),
     private val autoDeductProvider: suspend () -> Boolean = { false }
 ) {

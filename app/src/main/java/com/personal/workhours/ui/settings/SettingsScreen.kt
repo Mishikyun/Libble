@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -20,11 +21,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,8 +51,14 @@ import com.personal.workhours.ui.components.InsetValueRow
 import com.personal.workhours.ui.components.LibbleSwitch
 import com.personal.workhours.ui.components.PillToggle
 import com.personal.workhours.ui.components.SectionOverline
+import com.personal.workhours.ui.components.SheetDragHandle
 import com.personal.workhours.ui.theme.WorkHoursTheme
 import com.personal.workhours.ui.theme.WorkHoursThemeExtras
+
+private enum class LegalDocument {
+    PRIVACY_POLICY,
+    TERMS_AND_CONDITIONS
+}
 
 @Composable
 fun SettingsScreen(
@@ -66,6 +76,7 @@ fun SettingsScreen(
     val checker = remember { PermissionHealthChecker(context) }
     var health by remember { mutableStateOf(checker.check()) }
     var showTestScheduledDialog by remember { mutableStateOf(false) }
+    var activeLegalDoc by remember { mutableStateOf<LegalDocument?>(null) }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         health = checker.check()
@@ -214,6 +225,22 @@ fun SettingsScreen(
             }
         }
 
+        // Legal
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            SectionOverline(title = "Legal")
+            InsetGroup {
+                InsetValueRow(
+                    label = "Privacy Policy",
+                    onClick = { activeLegalDoc = LegalDocument.PRIVACY_POLICY }
+                )
+                InsetRowDivider()
+                InsetValueRow(
+                    label = "Terms & Conditions",
+                    onClick = { activeLegalDoc = LegalDocument.TERMS_AND_CONDITIONS }
+                )
+            }
+        }
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -236,6 +263,13 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(onClick = { showTestScheduledDialog = false }) { Text("OK") }
             }
+        )
+    }
+
+    activeLegalDoc?.let { doc ->
+        LegalDocumentSheet(
+            doc = doc,
+            onDismiss = { activeLegalDoc = null }
         )
     }
 }
@@ -295,6 +329,103 @@ private fun PermissionRow(
             }
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LegalDocumentSheet(
+    doc: LegalDocument,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val title = when (doc) {
+        LegalDocument.PRIVACY_POLICY -> "Privacy Policy"
+        LegalDocument.TERMS_AND_CONDITIONS -> "Terms & Conditions"
+    }
+    val sections = remember(doc) {
+        when (doc) {
+            LegalDocument.PRIVACY_POLICY -> listOf(
+                "Zero Data Collection" to "Libble operates 100% offline with no internet permissions, analytics SDKs, crash trackers, or remote servers. Your work logs and schedules never leave your device unless you export them.",
+                "On-Device Storage" to "Clock punches, break sessions, schedules, Day Off overrides, and preferences are stored locally in Android's private Room database and DataStore with cloud auto-backup disabled (allowBackup=false).",
+                "Permissions Used" to "Notifications, exact alarms, lock-screen alerts, foreground media playback, boot rescheduling, and optional unrestricted battery optimization are used solely to deliver local shift and break reminders.",
+                "Exports & Backups" to "CSV timesheets and JSON backups are written only when explicitly initiated via Android's system file picker. Selected restore files are validated locally before applying.",
+                "Your Control" to "Edit or delete shift logs in History anytime, or clear app storage / uninstall Libble to erase all local data."
+            )
+            LegalDocument.TERMS_AND_CONDITIONS -> listOf(
+                "Personal Utility (AS IS)" to "Libble is provided on an \"AS IS\" and \"AS AVAILABLE\" basis as a personal work-hours tracker and reminder utility, without warranties of uninterrupted alarm delivery or error-free operation.",
+                "Not Official Payroll Records" to "You are responsible for verifying logged hours, breaks, and exported CSV files before submitting timesheets, invoices, or payroll claims.",
+                "Alarm & Device Constraints" to "Android Doze mode, OEM battery savers, Do Not Disturb, mute/volume states, or powered-off devices can delay or suppress alerts. Verify Settings → Alerts & permissions and run test alarms regularly.",
+                "Offline Data Responsibility" to "Because automatic cloud backup is disabled, uninstalling Libble or clearing app data permanently deletes local records. Export periodic JSON backups under Settings → Data to preserve your history."
+            )
+        }
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.background,
+        tonalElevation = 0.dp,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        dragHandle = { SheetDragHandle() }
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 24.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = "Effective Nov 28, 2026 · Libble v${BuildConfig.VERSION_NAME}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                TextButton(onClick = onDismiss) {
+                    Text("Close")
+                }
+            }
+
+            InsetGroup {
+                sections.forEachIndexed { index, (heading, body) ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 14.dp)
+                    ) {
+                        Text(
+                            text = heading,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = body,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    if (index < sections.lastIndex) {
+                        InsetRowDivider()
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)

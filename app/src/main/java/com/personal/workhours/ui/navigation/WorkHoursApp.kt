@@ -126,34 +126,34 @@ fun WorkHoursApp(
             true -> Unit
         }
 
-        val dashboardVm: DashboardViewModel = viewModel(
-            factory = DashboardViewModel.Factory(
+        val dashboardVm: DashboardViewModel = viewModel {
+            DashboardViewModel(
                 container.workLogRepository,
                 container.scheduleRepository,
                 container.preferencesRepository,
                 container.clock
             )
-        )
-        val historyVm: HistoryViewModel = viewModel(
-            factory = HistoryViewModel.Factory(
+        }
+        val historyVm: HistoryViewModel = viewModel {
+            HistoryViewModel(
                 container.workLogRepository,
                 container.scheduleRepository,
                 container.preferencesRepository,
                 container.clock
             )
-        )
-        val scheduleVm: ScheduleViewModel = viewModel(
-            factory = ScheduleViewModel.Factory(container.scheduleRepository)
-        )
-        val settingsVm: SettingsViewModel = viewModel(
-            factory = SettingsViewModel.Factory(
+        }
+        val scheduleVm: ScheduleViewModel = viewModel {
+            ScheduleViewModel(container.scheduleRepository)
+        }
+        val settingsVm: SettingsViewModel = viewModel {
+            SettingsViewModel(
                 container.preferencesRepository,
                 container.workLogRepository,
                 container.scheduleRepository,
                 container.alarmScheduler,
                 container.clock
             )
-        )
+        }
 
         val dashboardState by dashboardVm.uiState.collectAsStateWithLifecycle()
         val historyState by historyVm.uiState.collectAsStateWithLifecycle()
